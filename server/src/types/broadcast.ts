@@ -4,6 +4,7 @@ export type Broadcast = {
   id: string
   type: BroadcastType
   title: string
+  platform: string
   category: string
   broadcastTime: string | null
   viewCount: number | null

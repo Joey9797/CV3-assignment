@@ -22,8 +22,7 @@ export type LiveItem = {
 
 export type HomeshoppingItem = {
   hsshow_id: string
-  platform_id: string
-  platform_name?: string
+  platform_name: string
   hsshow_title: string
   hsshow_datetime_start: string
   hsshow_datetime_end?: string

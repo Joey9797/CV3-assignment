@@ -1,3 +1,4 @@
+import { getLivePlatformName } from '../constants/livePlatformNames.js'
 import type { Broadcast } from '../types/broadcast.js'
 import type {
   CategoryMap,
@@ -58,6 +59,7 @@ export function mapLiveBroadcast(
     id: item.objectID,
     type: 'live',
     title: item.title ?? '',
+    platform: getLivePlatformName(item.platform_id),
     category: getCategoryName(item.cid, cats),
     broadcastTime: toIso8601(item.datetime_start),
     viewCount: item.visit_cnt ?? null,
@@ -82,6 +84,7 @@ export function mapHomeshoppingBroadcast(
     id: item.hsshow_id,
     type: 'homeshopping',
     title: item.hsshow_title ?? '',
+    platform: item.platform_name ?? '',
     category: item.cat?.cat_name ?? '기타',
     broadcastTime: toIso8601(item.hsshow_datetime_start),
     viewCount: item.visit_cnt ?? null,
