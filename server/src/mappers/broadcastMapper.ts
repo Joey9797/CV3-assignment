@@ -6,7 +6,11 @@ import type {
 } from '../types/labangba.js'
 
 /**
- * 라방 cid(소분류) → 대분류 name
+ * 라방 cid를 화면용 분류명(대분류)으로 변환
+ * pid가 대분류(null)인 경우 그대로 반환, 소분류인 경우 상위 대분류명을 반환
+ *
+ * @param cid 소분류(또는 대분류) 카테고리 id
+ * @param cats gnb 카테고리 맵
  */
 export function getCategoryName(cid: number | string, cats: CategoryMap): string {
   const sub = cats[String(cid)]
@@ -18,7 +22,10 @@ export function getCategoryName(cid: number | string, cats: CategoryMap): string
 }
 
 /**
- * YYMMDDHHmm(10) 또는 YYYYMMDDHHmm(12) → ISO 8601 (KST, +09:00)
+ * 라방바 날짜 문자열을 ISO 8601(KST, +09:00)로 변환
+ * YMMDDHHmm(10) YYYYMMDDHHmm(12) -> yyyy-mm-ddThh:mm:00+09:00
+ *
+ * @param value 라방바 raw datetime
  */
 function toIso8601(value: string | null | undefined): string | null {
   if (!value) return null
@@ -35,6 +42,13 @@ function toIso8601(value: string | null | undefined): string | null {
   return `${year}-${month}-${day}T${hour}:${minute}:00+09:00`
 }
 
+/**
+ * 라방(live) raw 응답을 공통 Broadcast DTO로 변환
+ *
+ * @param item 라방바 live 목록 항목
+ * @param cats 카테고리 맵 (cid → 분류명 변환용)
+ * @param rankNo 순위 (1~10)
+ */
 export function mapLiveBroadcast(
   item: LiveItem,
   cats: CategoryMap,
@@ -54,6 +68,12 @@ export function mapLiveBroadcast(
   }
 }
 
+/**
+ * 홈쇼핑(homeshopping) raw 응답을 공통 Broadcast DTO로 변환
+ *
+ * @param item 라방바 홈쇼핑 목록 항목
+ * @param rankNo 순위 (1~10)
+ */
 export function mapHomeshoppingBroadcast(
   item: HomeshoppingItem,
   rankNo: number,

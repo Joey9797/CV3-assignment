@@ -14,6 +14,10 @@ class HttpError extends Error {
 
 let categoryCache: CategoryMap | null = null
 
+/**
+ * 카테고리 맵 조회
+ * 최초에 외부 API를 호출, 이후에는 메모리 캐시를 반환
+ */
 async function getCategories(): Promise<CategoryMap> {
   if (!categoryCache) {
     categoryCache = await fetchCategories()
@@ -21,6 +25,12 @@ async function getCategories(): Promise<CategoryMap> {
   return categoryCache
 }
 
+/**
+ * 방송 유형별 목록 조회 (최대 10개)
+ *
+ * @param type live | homeshopping
+ * @throws {HttpError} type이 유효하지 않은 경우 400
+ */
 export async function getBroadcasts(type: string): Promise<Broadcast[]> {
   if (type !== 'live' && type !== 'homeshopping') {
     throw new HttpError('잘못된 요청 type 입니다.', 400)
@@ -46,7 +56,8 @@ export async function getBroadcasts(type: string): Promise<Broadcast[]> {
 }
 
 /**
- * 서버 실행 시 카테고리 미리 로드 (실패해도 서버는 계속 실행됨)
+ * 서버 실행 시 카테고리 캐시 미리 로드
+ * 실패해도 서버는 계속 실행됨
  */
 export async function warmUpCategoryCache(): Promise<void> {
   try {
